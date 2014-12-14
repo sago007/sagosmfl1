@@ -16,12 +16,12 @@
 class MainMenu : public sago::GameState {
 public:
 	MainMenu(const sago::SagoDataHolder &texHolder);
-	bool IsActive();
-	bool IsBlockingDraw();
-	bool IsBlockingUpdate();
-	void Draw(sf::RenderWindow &target);
-	void Update(float fDeltaTime, const sago::SagoCommandQueue &input);
-	void UpdateCommandQueue(sago::SagoCommandQueue &inout);
+	bool IsActive() override;
+	bool IsBlockingDraw() override;
+	bool IsBlockingUpdate() override;
+	void Draw(sf::RenderWindow &target) override;
+	void Update(float fDeltaTime, const sago::SagoCommandQueue &input) override;
+	void UpdateCommandQueue(sago::SagoCommandQueue &inout) override;
 private:
 	void ReadEvents(const sago::SagoCommandQueue &queue);
 	sago::menu::SagoMenuStack stack;

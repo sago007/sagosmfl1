@@ -125,8 +125,8 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 		deltaX += 1.0f;
 	}
 	MoveHumanEntity(data->human.get(), deltaX, deltaY, fDeltaTime);
-	data->center_x = data->human->X;
-	data->center_y = data->human->Y;
+	data->center_x = round(data->human->X);
+	data->center_y = round(data->human->Y);
 }
 
 void Game::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
