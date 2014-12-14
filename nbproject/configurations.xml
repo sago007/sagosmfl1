@@ -2,6 +2,9 @@
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
+      <df name="model">
+        <in>World.cpp</in>
+      </df>
       <df name="sago">
         <in>FrameCounter.cpp</in>
         <in>GameStateManager.cpp</in>
@@ -54,21 +57,7 @@
         </makeTool>
       </makefileType>
       <item path="CommandProcessor.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="Game.cpp" ex="false" tool="1" flavor2="8">
@@ -76,249 +65,65 @@
         </ccTool>
       </item>
       <item path="MainMenu.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <folder path="0/model">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
             <pElem>.</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
           </incDir>
+        </ccTool>
+      </folder>
+      <folder path="0/sago">
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <item path="model/World.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/FrameCounter.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/GameStateManager.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoCommandQueue.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoDataHolder.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/SFML/Audio</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoMenu.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoMisc.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoMusicBackground.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/include/SFML/Audio</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoSprite.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sago/SagoSpriteHolder.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/jsoncpp/json</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>/usr/include/boost/algorithm/string/detail</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/boost/config</pElem>
-            <pElem>/usr/include/boost/mpl/aux_</pElem>
-            <pElem>/usr/include/boost/mpl/aux_/preprocessed/gcc</pElem>
-            <pElem>/usr/include/boost/mpl</pElem>
-            <pElem>/usr/include/boost/type_traits</pElem>
-            <pElem>/usr/include/boost/type_traits/detail</pElem>
-            <pElem>/usr/include/boost/range</pElem>
-            <pElem>/usr/include/boost/range/detail</pElem>
-            <pElem>/usr/include/boost/detail</pElem>
-            <pElem>/usr/include/boost/iterator/detail</pElem>
-            <pElem>/usr/include/boost/concept/detail</pElem>
-            <pElem>/usr/include/boost/algorithm/string</pElem>
-            <pElem>/usr/include/boost/iterator</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="sagosmfl1.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/boost/smart_ptr/detail</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/boost/program_options</pElem>
-            <pElem>/usr/include/boost/function</pElem>
-            <pElem>/usr/include/boost/program_options/detail</pElem>
-            <pElem>/usr/include/boost</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/include/boost/exception</pElem>
-            <pElem>/usr/include/SFML/Graphics</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>sago</pElem>
-            <pElem>/usr/include/SFML/Window</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/boost/config</pElem>
-            <pElem>/usr/include/boost/mpl/aux_</pElem>
-            <pElem>/usr/include/boost/mpl</pElem>
-            <pElem>/usr/include/boost/mpl/aux_/preprocessed/gcc</pElem>
-            <pElem>/usr/include/boost/type_traits/detail</pElem>
-            <pElem>/usr/include/boost/type_traits</pElem>
-            <pElem>/usr/include/boost/detail</pElem>
-            <pElem>/usr/include/boost/smart_ptr</pElem>
-            <pElem>/usr/include/boost/numeric/conversion/detail</pElem>
-            <pElem>/usr/include/boost/numeric/conversion</pElem>
-            <pElem>/usr/include/boost/math/tools</pElem>
-            <pElem>/usr/include/boost/math/policies</pElem>
-            <pElem>/usr/include/boost/iterator/detail</pElem>
-            <pElem>/usr/include/boost/range</pElem>
-            <pElem>/usr/include/boost/range/detail</pElem>
-            <pElem>/usr/include/boost/concept/detail</pElem>
-            <pElem>/usr/include/boost/container</pElem>
-            <pElem>/usr/include/SFML</pElem>
-            <pElem>/usr/include/SFML/System</pElem>
-            <pElem>.</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
     </conf>

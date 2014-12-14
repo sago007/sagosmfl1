@@ -7,6 +7,7 @@
 
 #include "Game.hpp"
 #include "model/Items.hpp"
+#include "model/World.hpp"
 #include <iostream>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
@@ -20,8 +21,9 @@ struct Game::GameImpl {
 	float time = 0.0;
 	shared_ptr<Human> human;
 	shared_ptr<Tile> basic_tile;
-	int center_x = 0;
-	int center_y = 0;
+	long long center_x = 0;
+	long long center_y = 0;
+	World mainworld;
 };
 
 
@@ -51,7 +53,7 @@ bool Game::IsBlockingUpdate()  {
 	return true;
 }
 
-static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, int offsetX, int offsetY) {
+static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY) {
 	string animation = "standing";
 	if (entity->moving) {
 		animation = "walkcycle";
@@ -60,17 +62,24 @@ static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-void Game::DrawTiles(sf::RenderWindow &target, int topX, int topY, int width, int height) {
+void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, const World& world, long long worldX, long long worldY) {
+	
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
+			if (world.GetTile(worldX+x, worldY+y) == 0) {
+				continue;
+			}
 			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->basic_tile->sprite);
-			sprite.Draw(target, data->time, topX+x*32, topY+y*32);
+			sprite.Draw(target, data->time, topXpixel+x*32, topYpixel+y*32);
 		}
 	}
 }
 
 void Game::Draw(sf::RenderWindow &target) {
-	DrawTiles(target, (-data->center_x)%32-32, (-data->center_y)%32-32, 40, 30);
+	const int tileSize = 32;
+	const int drawWidth = 40;
+	const int drawHeight = 30;
+	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, (data->center_x)/tileSize-drawWidth/2, (data->center_y)/tileSize-drawHeight/2);
 	for (const auto& placeable : data->placeables) {
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
