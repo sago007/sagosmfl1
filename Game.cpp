@@ -79,7 +79,7 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int tileSize = 32;
 	const int drawWidth = 40;
 	const int drawHeight = 30;
-	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, (data->center_x)/tileSize-drawWidth/2, (data->center_y)/tileSize-drawHeight/2);
+	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, (data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
 	for (const auto& placeable : data->placeables) {
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
@@ -136,6 +136,7 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	MoveHumanEntity(data->human.get(), deltaX, deltaY, fDeltaTime);
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
+	//cout << round(data->human->X/32) << " " << round(data->human->Y/32) << endl;
 }
 
 void Game::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
