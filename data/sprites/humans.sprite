@@ -11,9 +11,7 @@
 	"height" : 64,
 	"width" : 64,
 	"number_of_frames" : 1,
-	"frame_time" : 1,
-    "originx" : 32,
-    "originy" : 64
+	"frame_time" : 1
 },
 
 "male_walkcycle_N" :  {
@@ -25,7 +23,7 @@
 	"number_of_frames" : 8,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_walkcycle_W" :  {
@@ -37,7 +35,7 @@
 	"number_of_frames" : 8,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_walkcycle_S" :  {
@@ -49,7 +47,7 @@
 	"number_of_frames" : 8,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_walkcycle_E" :  {
@@ -61,7 +59,7 @@
 	"number_of_frames" : 8,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_standing_N" :  {
@@ -73,7 +71,7 @@
 	"number_of_frames" : 1,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_standing_W" :  {
@@ -85,7 +83,7 @@
 	"number_of_frames" : 1,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_standing_S" :  {
@@ -97,7 +95,7 @@
 	"number_of_frames" : 1,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 },
 
 "male_standing_E" :  {
@@ -109,7 +107,7 @@
 	"number_of_frames" : 1,
 	"frame_time" : 100,
     "originx" : 32,
-    "originy" : 64
+    "originy" : 50
 }
 
 }

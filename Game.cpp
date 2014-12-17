@@ -58,6 +58,9 @@ static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago
 	if (entity->moving) {
 		animation = "walkcycle";
 	}
+	sf::CircleShape circle(16);
+	circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
+	target.draw(circle);
 	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->race + "_"+animation+"_"+string(1,entity->direction));
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
@@ -80,6 +83,7 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int drawWidth = 40;
 	const int drawHeight = 30;
 	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, (data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
+	
 	for (const auto& placeable : data->placeables) {
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
