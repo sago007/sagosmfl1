@@ -8,9 +8,11 @@
 #ifndef ITEMS_HPP
 #define	ITEMS_HPP
 
+#include <string>
+
 class Tile {
 public:
-	int internalId = 0;
+	unsigned int internalId = 0;
 	std::string name;
 	std::string sprite;
 	bool blocking = false;

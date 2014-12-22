@@ -8,6 +8,7 @@
 #include "Game.hpp"
 #include "model/Items.hpp"
 #include "model/World.hpp"
+#include "model/TileManager.hpp"
 #include <iostream>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
@@ -20,13 +21,26 @@ struct Game::GameImpl {
 	std::shared_ptr<sago::SagoSpriteHolder> sprites;
 	float time = 0.0;
 	shared_ptr<Human> human;
-	shared_ptr<Tile> basic_tile;
 	long long center_x = 0;
 	long long center_y = 0;
 	World mainworld;
+	TileManager tileManager;
 };
 
-
+static void CreateTiles( TileManager &manager) {
+	Tile t;
+	t.internalId = 0;
+	t.name = "void" ;
+	t.sprite = "blank";
+	t.blocking = true;
+	manager.AddTile(t);
+	Tile t2;
+	t2.internalId = 1;
+	t2.name = "grass";
+	t2.sprite = "terrain_grass_center";
+	t2.blocking = false;
+	manager.AddTile(t2);
+}
 
 Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data = new GameImpl();
@@ -35,8 +49,7 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	shared_ptr<Human> human (new Human());
 	data->placeables.push_back(human);
 	data->human = human;
-	data->basic_tile = shared_ptr<Tile> (new Tile());
-	data->basic_tile->sprite = "terrain_grass_center";
+	CreateTiles(data->tileManager);
 }
 
 Game::~Game() {
@@ -69,10 +82,11 @@ void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int
 	
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
-			if (world.GetTile(worldX+x, worldY+y) == 0) {
+			int tileId = world.GetTile(worldX+x, worldY+y);
+			if ( tileId == 0) {
 				continue;
 			}
-			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->basic_tile->sprite);
+			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->tileManager.GetTile(tileId).sprite);
 			sprite.Draw(target, data->time, topXpixel+x*32, topYpixel+y*32);
 		}
 	}
@@ -82,7 +96,8 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int tileSize = 32;
 	const int drawWidth = 40;
 	const int drawHeight = 30;
-	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, (data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
+	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, 
+	(data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
 	
 	for (const auto& placeable : data->placeables) {
 		const Human *h = dynamic_cast<Human*>(placeable.get());

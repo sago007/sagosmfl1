@@ -8,6 +8,8 @@
 #ifndef WORLD_HPP
 #define	WORLD_HPP
 
+#include "TileManager.hpp"
+
 class World {
 public:
 	World();
