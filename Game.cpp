@@ -15,6 +15,17 @@
 
 using namespace std;
 
+/**
+ * This sort method sorts the elements from furthest to screen to closest to screen, so that elemnets closer to the screen will be drawn last
+ * @param lhs Left hand side
+ * @param rhs Right hand side
+ * @return true if lhs < rhs
+ */
+static bool sort_placeable(const shared_ptr<Placeable> &lhs, const shared_ptr<Placeable> &rhs)
+{
+	return lhs->Y < rhs->Y;
+}
+
 struct Game::GameImpl {
 	vector<shared_ptr<Placeable> > placeables;
 	const sago::SagoDataHolder *dataHolder;
@@ -41,9 +52,16 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data->dataHolder = &dataHolder;
 	data->sprites = std::shared_ptr<sago::SagoSpriteHolder>(new sago::SagoSpriteHolder(*(data->dataHolder)));
 	shared_ptr<Human> human (new Human());
+	human->Radius = 16.0f;
 	data->placeables.push_back(human);
 	data->human = human;
 	CreateTiles(data->tileManager);
+	shared_ptr<MistItem> p(new MistItem());
+	p->Radius = 16.0;
+	p->X = 50.0;
+	p->Y = 140.0;
+	p->sprite = "item_barrel";
+	data->placeables.push_back(p);
 }
 
 Game::~Game() {
@@ -65,10 +83,18 @@ static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago
 	if (entity->moving) {
 		animation = "walkcycle";
 	}
-	sf::CircleShape circle(16);
+	sf::CircleShape circle(entity->Radius);
 	circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
 	target.draw(circle);
 	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->race + "_"+animation+"_"+string(1,entity->direction));
+	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
+}
+
+static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, long long offsetX, long long offsetY) {
+	sf::CircleShape circle(entity->Radius);
+	circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
+	target.draw(circle);
+	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->sprite);
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
@@ -93,7 +119,13 @@ void Game::Draw(sf::RenderWindow &target) {
 	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, 
 	(data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
 	
+	sort(data->placeables.begin(), data->placeables.end(), sort_placeable);
+	
 	for (const auto& placeable : data->placeables) {
+		const MistItem *m = dynamic_cast<MistItem*>(placeable.get());
+		if (m) {
+			DrawMiscItem(target, data->sprites, m, data->time, data->center_x-1024/2, data->center_y-768/2);
+		}
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
 			DrawHumanEntity(target, data->sprites, h, data->time, data->center_x-1024/2, data->center_y-768/2);

@@ -28,6 +28,11 @@ public:
 	virtual bool isStatic() {return true; }
 };
 
+class MistItem : public Placeable {
+public:
+	std::string sprite;
+};
+
 class Creature : public Placeable {
 public:
 	float health = 10.0;
