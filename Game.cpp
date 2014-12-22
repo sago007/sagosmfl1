@@ -32,6 +32,8 @@ static void CreateTiles( TileManager &manager) {
 	manager.AddTile(t);
 	Tile t2(1, "grass", "terrain_grass_center", false);
 	manager.AddTile(t2);
+	Tile t3(2, "clay", "terrian_clay_center", false);
+	manager.AddTile(t3);
 }
 
 Game::Game(const sago::SagoDataHolder &dataHolder) {

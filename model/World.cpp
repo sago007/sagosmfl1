@@ -37,6 +37,9 @@ int World::GetTile (long long x, long long y) const {
 	if (x < 0 || y < 0 || x > GetSizeX() || y > GetSizeY()) {
 		return 0;
 	}
+	if (x > 10 && x < 20 && y > 5 && y <25) {
+		return 2;
+	}
 	return 1;
 }
 
