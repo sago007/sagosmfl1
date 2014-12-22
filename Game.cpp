@@ -28,17 +28,9 @@ struct Game::GameImpl {
 };
 
 static void CreateTiles( TileManager &manager) {
-	Tile t;
-	t.internalId = 0;
-	t.name = "void" ;
-	t.sprite = "blank";
-	t.blocking = true;
+	Tile t(0, "void", "blank", true);
 	manager.AddTile(t);
-	Tile t2;
-	t2.internalId = 1;
-	t2.name = "grass";
-	t2.sprite = "terrain_grass_center";
-	t2.blocking = false;
+	Tile t2(1, "grass", "terrain_grass_center", false);
 	manager.AddTile(t2);
 }
 

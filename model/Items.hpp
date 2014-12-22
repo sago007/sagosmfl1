@@ -12,6 +12,8 @@
 
 class Tile {
 public:
+	Tile() = default;
+	Tile(unsigned int id, std::string name, std::string sprite, bool blocking) : internalId(id), name(name), sprite(sprite), blocking(blocking) {};
 	unsigned int internalId = 0;
 	std::string name;
 	std::string sprite;
