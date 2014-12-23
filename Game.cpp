@@ -7,8 +7,9 @@
 
 #include "Game.hpp"
 #include "model/Items.hpp"
-#include "model/World.hpp"
+#include "model/Misc.hpp"
 #include "model/TileManager.hpp"
+#include "model/World.hpp"
 #include <iostream>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
@@ -78,6 +79,12 @@ bool Game::IsBlockingUpdate()  {
 	return true;
 }
 
+static void CheckCollision(vector<shared_ptr<Placeable> > placeables) {
+	if ( IsTouching(*placeables.at(0).get(), *placeables.at(1).get())) {
+		cout << "Tocuhing" << endl;
+	}
+}
+
 static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY) {
 	string animation = "standing";
 	if (entity->moving) {
@@ -117,7 +124,7 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int drawWidth = 40;
 	const int drawHeight = 30;
 	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, 
-	(data->center_x)/tileSize-(1024/32)/2-1, (data->center_y)/tileSize-(768/32)/2-1);
+	(data->center_x)/tileSize-(1024/tileSize)/2-1, (data->center_y)/tileSize-(768/tileSize)/2-1);
 	
 	sort(data->placeables.begin(), data->placeables.end(), sort_placeable);
 	
@@ -181,6 +188,7 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	MoveHumanEntity(data->human.get(), deltaX, deltaY, fDeltaTime);
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
+	CheckCollision(data->placeables);
 	//cout << round(data->human->X/32) << " " << round(data->human->Y/32) << endl;
 }
 

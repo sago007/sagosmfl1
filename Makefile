@@ -13,7 +13,7 @@ BASE_CFLAGS=-c -g -O2 -Wall -std=c++11
 
 PROGRAMNAME=sagosmfl1
 
-O_FILES=${PROGRAMNAME}.o MainMenu.o Game.o CommandProcessor.o model/World.o model/TileManager.o ${SAGO_O_FILES}
+O_FILES=${PROGRAMNAME}.o MainMenu.o Game.o CommandProcessor.o model/Misc.o model/World.o model/TileManager.o ${SAGO_O_FILES}
 
 total: ${PROGRAMNAME}
 
