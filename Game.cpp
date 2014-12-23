@@ -80,9 +80,14 @@ bool Game::IsBlockingUpdate()  {
 }
 
 static void CheckCollision(vector<shared_ptr<Placeable> > placeables) {
-	if ( IsTouching(*placeables.at(0).get(), *placeables.at(1).get())) {
-		cout << "Tocuhing" << endl;
+	for (unsigned int i = 0; i < placeables.size(); ++i) {
+		for (unsigned int j = i+1; j < placeables.size(); ++j) {
+			if ( IsTouching(*placeables.at(i).get(), *placeables.at(j).get())) {
+				cout << "Tocuhing" << endl;
+			}
+		}
 	}
+	
 }
 
 static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY) {
