@@ -79,7 +79,7 @@ bool Game::IsBlockingUpdate()  {
 	return true;
 }
 
-static void CheckCollision(vector<shared_ptr<Placeable> > placeables) {
+static void CheckCollision(vector<shared_ptr<Placeable> > &placeables) {
 	for (unsigned int i = 0; i < placeables.size(); ++i) {
 		for (unsigned int j = i+1; j < placeables.size(); ++j) {
 			if ( IsTouching(*placeables.at(i).get(), *placeables.at(j).get())) {
