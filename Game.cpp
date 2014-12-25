@@ -44,7 +44,7 @@ static void CreateTiles( TileManager &manager) {
 	manager.AddTile(t);
 	Tile t2(1, "grass", "terrain_grass_center", false);
 	manager.AddTile(t2);
-	Tile t3(2, "clay", "terrian_clay_center", false);
+	Tile t3(2, "clay", "terrian_clay_center", true);
 	manager.AddTile(t3);
 }
 
@@ -149,7 +149,20 @@ void Game::Draw(sf::RenderWindow &target) {
 	}
 }
 
-static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > &collidables, float destX, float destY ) {
+static vector<pair<long long int, long long int> > getTouchingTiles(const Placeable* entity) {
+	const long long int tileSize = 32;
+	vector<pair<long long int, long long int> > res;
+	vector<pair<long long int, long long int> > candidates;
+	for (long long int i = floor((entity->X-entity->Radius) / tileSize); i < (entity->X+entity->Radius)/ tileSize ; i++ ) {
+		for (long long int j = floor((entity->Y-entity->Radius) / tileSize); j < (entity->Y+entity->Radius)/ tileSize ; j++ ) {
+			candidates.push_back(make_pair(i,j));
+		}
+	}
+	res = candidates;
+	return res;
+}
+
+static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > &collidables, const World &world, const TileManager &tileManager, float destX, float destY ) {
 	bool canMove = true;
 	float sourceX = entity->X;
 	float sourceY = entity->Y;
@@ -163,6 +176,14 @@ static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > 
 			canMove = false;
 		}
 	}
+	if ( canMove) {
+		auto tiles = getTouchingTiles(entity);
+		for (auto tile : tiles) {
+			if (tileManager.GetTile(world.GetTile(tile.first, tile.second)).blocking) {
+				canMove = false;
+			}
+		}
+	}
 	if ( !canMove ) {
 		entity->X = sourceX;
 		entity->Y = sourceY;
@@ -170,7 +191,7 @@ static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > 
 	return canMove;
 }
 
-static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > collidables, float directionX, float directionY, float fDeltaTime) {
+static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > collidables, const World &world, const TileManager &tileManager, float directionX, float directionY, float fDeltaTime) {
 	float deltaX = directionX;
 	float deltaY = directionY;
 	if (deltaX == 0.0f && deltaY == 0.0f) {
@@ -195,7 +216,7 @@ static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > co
 		entity->direction = 'E';
 	}
 	float speed = 4.0f;
-	MoveEntity (entity, collidables, entity->X + deltaX*(fDeltaTime/speed), entity->Y + deltaY*(fDeltaTime/speed));
+	MoveEntity (entity, collidables, world, tileManager, entity->X + deltaX*(fDeltaTime/speed), entity->Y + deltaY*(fDeltaTime/speed));
 }
 
 void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
@@ -214,7 +235,7 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	if (input.IsPressed("RIGHT")) {
 		deltaX += 1.0f;
 	}
-	MoveHumanEntity(data->human.get(), data->placeables, deltaX, deltaY, fDeltaTime);
+	MoveHumanEntity(data->human.get(), data->placeables, data->mainworld, data->tileManager, deltaX, deltaY, fDeltaTime);
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
 	CheckCollision(data->placeables);
