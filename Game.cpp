@@ -63,6 +63,10 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	p->Y = 140.0;
 	p->sprite = "item_barrel";
 	data->placeables.push_back(p);
+	shared_ptr<MistItem> p2(new MistItem());
+	*p2 = *p;
+	p2->X = 100.0;
+	data->placeables.push_back(p2);
 }
 
 Game::~Game() {
@@ -145,7 +149,28 @@ void Game::Draw(sf::RenderWindow &target) {
 	}
 }
 
-static void MoveHumanEntity (Creature *entity, float directionX, float directionY, float fDeltaTime) {
+static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > &collidables, float destX, float destY ) {
+	bool canMove = true;
+	float sourceX = entity->X;
+	float sourceY = entity->Y;
+	entity->X = destX;
+	entity->Y = destY;
+	for ( const shared_ptr<Placeable>& item : collidables) {
+		if (item.get() == entity ) {
+			continue;
+		}
+		if (IsTouching(*entity, *item)) {
+			canMove = false;
+		}
+	}
+	if ( !canMove ) {
+		entity->X = sourceX;
+		entity->Y = sourceY;
+	}
+	return canMove;
+}
+
+static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > collidables, float directionX, float directionY, float fDeltaTime) {
 	float deltaX = directionX;
 	float deltaY = directionY;
 	if (deltaX == 0.0f && deltaY == 0.0f) {
@@ -170,8 +195,7 @@ static void MoveHumanEntity (Creature *entity, float directionX, float direction
 		entity->direction = 'E';
 	}
 	float speed = 4.0f;
-	entity->X += deltaX*(fDeltaTime/speed);
-	entity->Y += deltaY*(fDeltaTime/speed);
+	MoveEntity (entity, collidables, entity->X + deltaX*(fDeltaTime/speed), entity->Y + deltaY*(fDeltaTime/speed));
 }
 
 void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
@@ -190,7 +214,7 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	if (input.IsPressed("RIGHT")) {
 		deltaX += 1.0f;
 	}
-	MoveHumanEntity(data->human.get(), deltaX, deltaY, fDeltaTime);
+	MoveHumanEntity(data->human.get(), data->placeables, deltaX, deltaY, fDeltaTime);
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
 	CheckCollision(data->placeables);
