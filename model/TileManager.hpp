@@ -11,6 +11,7 @@
 #include "Items.hpp"
 #include <vector>
 #include <map>
+#include <memory>
 
 
 class TileManager {
@@ -23,6 +24,8 @@ private:
 	std::vector<Tile> tiles;
 	std::map<std::string,int> idMap;
 };
+
+void TileReadFile( TileManager &tileManager, const std::string &filename);
 
 #endif	/* TILEMANAGER_HPP */
 

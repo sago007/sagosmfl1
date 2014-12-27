@@ -11,6 +11,7 @@
 #include "model/TileManager.hpp"
 #include "model/World.hpp"
 #include <iostream>
+#include <bits/shared_ptr.h>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
 
@@ -36,27 +37,24 @@ struct Game::GameImpl {
 	long long center_x = 0;
 	long long center_y = 0;
 	World mainworld;
-	TileManager tileManager;
+	shared_ptr<TileManager> tileManager;
 };
 
 static void CreateTiles( TileManager &manager) {
-	Tile t(0, "void", "blank", true);
-	manager.AddTile(t);
-	Tile t2(1, "grass", "terrain_grass_center", false);
-	manager.AddTile(t2);
-	Tile t3(2, "clay", "terrian_clay_center", true);
-	manager.AddTile(t3);
+	TileReadFile(manager, "basic.tiles");
 }
 
 Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data = new GameImpl();
 	data->dataHolder = &dataHolder;
 	data->sprites = std::shared_ptr<sago::SagoSpriteHolder>(new sago::SagoSpriteHolder(*(data->dataHolder)));
+	data->tileManager = shared_ptr<TileManager>(new TileManager());
+	data->mainworld.SetTileManager(data->tileManager);
 	shared_ptr<Human> human (new Human());
 	human->Radius = 16.0f;
 	data->placeables.push_back(human);
 	data->human = human;
-	CreateTiles(data->tileManager);
+	CreateTiles(*(data->tileManager));
 	shared_ptr<MistItem> p(new MistItem());
 	p->Radius = 16.0;
 	p->X = 50.0;
@@ -122,7 +120,7 @@ void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int
 			if ( tileId == 0) {
 				continue;
 			}
-			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->tileManager.GetTile(tileId).sprite);
+			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->tileManager->GetTile(tileId).sprite);
 			sprite.Draw(target, data->time, topXpixel+x*32, topYpixel+y*32);
 		}
 	}
@@ -235,7 +233,7 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	if (input.IsPressed("RIGHT")) {
 		deltaX += 1.0f;
 	}
-	MoveHumanEntity(data->human.get(), data->placeables, data->mainworld, data->tileManager, deltaX, deltaY, fDeltaTime);
+	MoveHumanEntity(data->human.get(), data->placeables, data->mainworld, *(data->tileManager), deltaX, deltaY, fDeltaTime);
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
 	CheckCollision(data->placeables);

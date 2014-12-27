@@ -12,7 +12,7 @@
 	"frame_time" : 100
 },
 
-"terrian_clay_center" : {
+"terrain_clay_center" : {
     "texture" : "terrain",
 	"topx" : 32,
 	"topy" : 96,

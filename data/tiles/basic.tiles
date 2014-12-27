@@ -1,0 +1,18 @@
+{
+
+"void" :  {
+	"sprite" : "blank",
+	"blocking" : 1
+},
+
+"grass" :  {
+	"sprite" : "terrain_grass_center",
+	"blocking" : 0
+},
+
+"clay" :  {
+	"sprite" : "terrain_clay_center",
+	"blocking" : 1
+}
+
+}

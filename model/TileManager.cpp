@@ -7,6 +7,10 @@
 
 
 #include "TileManager.hpp"
+#include "../sago/SagoMisc.hpp"
+#include <jsoncpp/json/json.h>
+
+using namespace std;
 
 TileManager::TileManager() {
 }
@@ -26,4 +30,32 @@ void TileManager::AddTile(const Tile &tile) {
 
 int TileManager::GetId(const std::string &name) {
 	return idMap[name];
+}
+
+static unsigned int GetNextId() {
+	static unsigned int id = 1;  // 0 is reserved for void
+	return id++;
+}
+
+void TileReadFile(TileManager &tileManager, const std::string &filename) {
+	string fullfile = "tiles/"+filename;
+	string content = sago::GetFileContent(fullfile.c_str());
+	Json::Value root;   // will contains the root value after parsing
+	Json::Reader reader;
+	bool parsingSuccessful = reader.parse( content, root );
+	if ( !parsingSuccessful ) {
+		cerr << "Failed to parse: " << fullfile << endl
+				<< reader.getFormattedErrorMessages() << endl;
+		return;
+	}
+	for (Json::Value::iterator it = root.begin(); it != root.end() ; ++it) {
+		Tile t;
+		t.internalId = GetNextId();
+		t.name = it.memberName();
+		Json::Value value = (*it);
+		t.sprite = value.get("sprite","fallback").asString();
+		t.blocking = value.get("blocking",0).asInt();
+		tileManager.AddTile(t);
+		cout << "Added " << t.name << " with id: " << t.internalId << endl;
+	}
 }

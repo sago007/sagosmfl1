@@ -26,6 +26,10 @@ long long World::GetSizeY() const {
 	return sizeY;
 }
 
+void World::SetTileManager(std::shared_ptr<TileManager> tileManager) {
+	this->tileManager = tileManager;
+}
+
 World::World(const World& orig) {
 	*this = orig;
 }
@@ -38,8 +42,8 @@ int World::GetTile (long long x, long long y) const {
 		return 0;
 	}
 	if (x > 10 && x < 20 && y > 5 && y <25) {
-		return 2;
+		return tileManager->GetId("clay");
 	}
-	return 1;
+	return tileManager->GetId("grass");
 }
 

@@ -21,9 +21,11 @@ public:
     long long GetSizeX() const;
     void SetSizeY(long long sizeY);
     long long GetSizeY() const;
+    void SetTileManager(std::shared_ptr<TileManager> tileManager);
 private:
 	long long sizeX = 1000;
 	long long sizeY = 1000;
+	std::shared_ptr<TileManager> tileManager;
 };
 
 #endif	/* WORLD_HPP */
