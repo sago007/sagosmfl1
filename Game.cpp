@@ -8,6 +8,7 @@
 #include "Game.hpp"
 #include "model/Items.hpp"
 #include "model/Misc.hpp"
+#include "model/Store.hpp"
 #include "model/TileManager.hpp"
 #include "model/World.hpp"
 #include <iostream>
@@ -38,6 +39,7 @@ struct Game::GameImpl {
 	long long center_y = 0;
 	World mainworld;
 	shared_ptr<TileManager> tileManager;
+	Store store;
 };
 
 static void CreateTiles( TileManager &manager) {
@@ -50,6 +52,7 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data->sprites = std::shared_ptr<sago::SagoSpriteHolder>(new sago::SagoSpriteHolder(*(data->dataHolder)));
 	data->tileManager = shared_ptr<TileManager>(new TileManager());
 	data->mainworld.SetTileManager(data->tileManager);
+	data->store.Open("test.db");
 	shared_ptr<Human> human (new Human());
 	human->Radius = 16.0f;
 	data->placeables.push_back(human);

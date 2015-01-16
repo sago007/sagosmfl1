@@ -30,6 +30,10 @@ void World::SetTileManager(std::shared_ptr<TileManager> tileManager) {
 	this->tileManager = tileManager;
 }
 
+const std::shared_ptr<TileManager>& World::GetTileManager() const {
+	return this->tileManager;
+}
+
 World::World(const World& orig) {
 	*this = orig;
 }

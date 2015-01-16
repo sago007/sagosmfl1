@@ -22,6 +22,7 @@ public:
     void SetSizeY(long long sizeY);
     long long GetSizeY() const;
     void SetTileManager(std::shared_ptr<TileManager> tileManager);
+	const std::shared_ptr<TileManager>& GetTileManager() const; 
 private:
 	long long sizeX = 1000;
 	long long sizeY = 1000;
