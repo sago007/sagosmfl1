@@ -58,6 +58,7 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data->placeables.push_back(human);
 	data->human = human;
 	CreateTiles(*(data->tileManager));
+	data->mainworld.MakeExample();
 	shared_ptr<MistItem> p(new MistItem());
 	p->Radius = 16.0;
 	p->X = 50.0;
