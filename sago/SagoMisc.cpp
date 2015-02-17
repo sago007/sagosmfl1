@@ -64,6 +64,16 @@ namespace sago {
 		return ret;
 	}
 	
+	void WriteFileContent(const char* filename, const std::string& content) {
+		PHYSFS_file* myfile = PHYSFS_openWrite(filename);
+		if (!myfile) {
+			cerr << "Failed to open file for writing, " << PHYSFS_getLastError() << endl;
+			return;
+		}
+		PHYSFS_write(myfile, content.c_str(), 1, content.length()+1);
+		PHYSFS_close(myfile);
+	}
+	
 	void DrawText(sf::RenderWindow &target, sf::Text font, const std::string &text, float x, float y, unsigned int size, sf::Color color) {
 		font.setCharacterSize(size);
 		font.setColor(color);
