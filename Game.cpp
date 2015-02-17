@@ -116,7 +116,7 @@ static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::S
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, const World& world, long long worldX, long long worldY) {
+void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, World& world, long long worldX, long long worldY) {
 	
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
@@ -164,7 +164,7 @@ static vector<pair<long long int, long long int> > getTouchingTiles(const Placea
 	return res;
 }
 
-static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > &collidables, const World &world, const TileManager &tileManager, float destX, float destY ) {
+static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > &collidables, World &world, const TileManager &tileManager, float destX, float destY ) {
 	bool canMove = true;
 	float sourceX = entity->X;
 	float sourceY = entity->Y;
@@ -193,7 +193,7 @@ static bool MoveEntity( Placeable* entity, const vector<shared_ptr<Placeable> > 
 	return canMove;
 }
 
-static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > collidables, const World &world, const TileManager &tileManager, float directionX, float directionY, float fDeltaTime) {
+static void MoveHumanEntity (Creature *entity, vector<shared_ptr<Placeable> > collidables, World &world, const TileManager &tileManager, float directionX, float directionY, float fDeltaTime) {
 	float deltaX = directionX;
 	float deltaY = directionY;
 	if (deltaX == 0.0f && deltaY == 0.0f) {
