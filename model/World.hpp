@@ -9,6 +9,11 @@
 #define	WORLD_HPP
 
 #include "TileManager.hpp"
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/vector.hpp>
+
 
 struct WorldPart {
 	WorldPart() {
@@ -39,12 +44,33 @@ public:
     long long GetSizeY() const;
     void SetTileManager(std::shared_ptr<TileManager> tileManager);
 	const std::shared_ptr<TileManager>& GetTileManager() const; 
-private:
+//private:
 	long long sizeX = 1000;
 	long long sizeY = 1000;
 	std::shared_ptr<TileManager> tileManager;
 	std::map<std::pair<long long, long long>, WorldPart> worldParts;
 };
+
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+void serialize(Archive & ar, WorldPart & wp, const unsigned int version)
+{
+	ar & BOOST_SERIALIZATION_NVP(wp.tiles);
+}
+
+template<class Archive>
+void serialize(Archive & ar, World & w, const unsigned int version)
+{
+	ar & BOOST_SERIALIZATION_NVP(w.sizeX);
+	ar & BOOST_SERIALIZATION_NVP(w.sizeY);
+	ar & BOOST_SERIALIZATION_NVP(w.worldParts);
+}
+
+} // namespace serialization
+} // namespace boost
+
 #endif	/* WORLD_HPP */
 
 

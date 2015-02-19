@@ -6,7 +6,7 @@ PKG_CONFIG=$(CROSS)pkg-config
 
 -include sago/Makefile.sago
 
-BASE_LIBS=-lboost_program_options -lcppdb $(SAGO_BASE_LIBS)
+BASE_LIBS=-lboost_program_options -lboost_serialization -lcppdb $(SAGO_BASE_LIBS)
 BASE_CFLAGS=-c -g -O2 -Wall -std=c++11
 
 

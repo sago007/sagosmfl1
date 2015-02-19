@@ -45,7 +45,11 @@ namespace {
 		PHYSFS_init(argv[0]);
 		std::string baseSearchPath = PHYSFS_getBaseDir();
 		baseSearchPath += "/data/";
-		PHYSFS_addToSearchPath(baseSearchPath.c_str(), 0);
+		PHYSFS_addToSearchPath(baseSearchPath.c_str(), 0); std::string baseWritePath = PHYSFS_getBaseDir();
+		int errorCode = PHYSFS_setWriteDir(baseWritePath.c_str());
+		if (errorCode == 0) {
+			cerr <<  PHYSFS_getLastError() << endl;
+		}
 	}
 	
 	struct BaseItems {

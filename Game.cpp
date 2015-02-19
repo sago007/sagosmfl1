@@ -12,9 +12,11 @@
 #include "model/TileManager.hpp"
 #include "model/World.hpp"
 #include <iostream>
+#include <sstream>
 #include <bits/shared_ptr.h>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
+#include "sago/SagoMisc.hpp"
 
 using namespace std;
 
@@ -69,6 +71,11 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	*p2 = *p;
 	p2->X = 100.0;
 	data->placeables.push_back(p2);
+	stringstream ss;
+	boost::archive::xml_oarchive archive(ss);
+	archive << boost::serialization::make_nvp("world", data->mainworld);
+	string world = ss.str();
+	sago::WriteFileContent("myWorld.txt",world);
 }
 
 Game::~Game() {
