@@ -63,6 +63,8 @@ public:
      * @param inout The state may add events to this
      */
     virtual void UpdateCommandQueue(sago::SagoCommandQueue &inout) = 0;
+	
+	virtual ~GameState() = default;
 };
 
 }

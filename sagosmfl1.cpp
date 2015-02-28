@@ -3,6 +3,7 @@
 #include "sago/GameStateManager.hpp"
 #include "sago/SagoDataHolder.hpp"
 #include "sago/SagoMenu.hpp"
+#include "sago/SagoMisc.hpp"
 #include "sago/SagoCommandQueue.hpp"
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
@@ -27,6 +28,8 @@ namespace {
 		cmdQ.BindKeyCommand("RETURN","CONFIRM");
 		cmdQ.BindKey(sf::Keyboard::Escape,"ESC");
 		cmdQ.BindKeyCommand("ESC","BACK");
+		cmdQ.BindKey(sf::Keyboard::Tab, "UNDER-ESC");
+		cmdQ.BindKeyCommand("UNDER-ESC","CONSOLE_TOGGLE");
 	}
 	
 	void ArgAndPhysInit(int argc, const char* argv[]) {
@@ -83,13 +86,10 @@ int main(int argc, const char* argv[])
 		sf::Int32 deltaTime = frameTime - lastFrameTime;
 		float fDeltaTime = static_cast<float>(deltaTime);
 		lastFrameTime = frameTime;
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
-				window.close();
-			}
-		}
 		base.cmdQ->ReadKeysAndAddCommands(window);
+		if (base.cmdQ->Closing()) {
+			window.close();
+		}
 		ProcessCommands(*base.cmdQ,*base.dataHolder,stateManager);
 		stateManager.Update(fDeltaTime,*base.cmdQ);
 		base.cmdQ->ClearCommands();

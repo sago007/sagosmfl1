@@ -40,6 +40,18 @@ public:
      */
 	void PushState(std::shared_ptr<GameState>);
 	/**
+	 * Pushes a state on the statck that will always be on the top even if more states are pushed.
+	 * This is reserved for a system state: Normally the drop-down console
+	 * If a console state is already active then it will be overwritten
+     * @param The console state
+     */
+	void SetConsole(std::shared_ptr<GameState>);
+	/**
+	 * Tests if the console is opne
+     * @return true if the console is open
+     */
+	bool ConsoleOpen();
+	/**
 	 * Checks the last inserted element and removes them until the topmost element is an active one or the stack is empty
      */
 	void PopInactive();
@@ -55,7 +67,7 @@ public:
      * @param fDeltaTime time since last call
      * @param input The input to react to
      */
-	void Update(float fDeltaTime, const sago::SagoCommandQueue &input);
+	void Update(float fDeltaTime, sago::SagoCommandQueue &input);
 	/**
 	 * Gives the element in the stack an option to add commands to the command queue
      * @param inout

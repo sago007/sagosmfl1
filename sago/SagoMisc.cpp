@@ -24,6 +24,9 @@ http://blockattack.sf.net
 #include "SagoMisc.hpp"
 #include <physfs.h>
 #include <iostream>
+#include <iconv.h>
+#include <string.h>
+#include <memory>
 
 using namespace std;
 
@@ -80,6 +83,48 @@ namespace sago {
 		font.setPosition(x,y);
 		font.setString(text);
 		target.draw(font);
+	}
+	
+	
+	void Utf32ToUtf8( const sf::String& source, std::string &dest) {
+		iconv_t ic;
+		ic = iconv_open("UTF8", "UTF32");
+		if (ic == 0) {
+			dest = "iconv error";
+			return;
+		}
+		size_t inSize = (source.getSize()+1)*sizeof(sf::Uint32);
+		size_t outSize = inSize+1;
+		//char* inBuffer = static_cast<char*>(calloc(inSize,1));
+		std::unique_ptr<char[]> inBuffer(new char[inSize]);
+		/*if (!inBuffer) { 
+			dest = "Out of memory"; 
+			return; 
+		}*/
+		memcpy(static_cast<void*>(inBuffer.get()), source.getData(), source.getSize()*sizeof(sf::Uint32));
+		//char* outBuffer = static_cast<char*>(calloc(outSize,1));
+		std::unique_ptr<char[]> outBuffer(new char[outSize]);
+		/*if (!outBuffer) { 
+			//free(inBuffer); 
+			dest = "Out of memory"; 
+			return; 
+		}*/
+		char* inPtr = inBuffer.get();
+		char* outPtr = outBuffer.get();
+		iconv(ic, &inPtr, &inSize, &outPtr, &outSize );
+		iconv_close(ic);
+		try {
+			dest = outBuffer.get();
+		} 
+		catch (std::exception &e) {
+			//free(inBuffer);
+			//free(outBuffer);
+			cerr << e.what() << endl;
+			dest = "Out of memroy";
+			//return;
+		} 
+		//free(inBuffer);
+		//free(outBuffer);
 	}
 	
 }

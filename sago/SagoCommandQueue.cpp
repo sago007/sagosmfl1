@@ -44,6 +44,8 @@ struct SagoCommandQueue::SagoCommandQueueData {
 	std::map<sf::Keyboard::Key, std::string> binds;
 	std::map<sf::Mouse::Button, std::string> mouseBinds;
 	std::vector<BoundCommand> bindCommands;
+	sf::String enteredText;
+	bool closing = false;
 };	
 	
 SagoCommandQueue::SagoCommandQueue() {
@@ -56,6 +58,26 @@ SagoCommandQueue::~SagoCommandQueue() {
 
 
 void SagoCommandQueue::ReadKeysAndAddCommands(sf::RenderWindow &window) {
+	sf::Event event;
+	sf::String& enteredText = data->enteredText;
+	enteredText.clear();
+	while (window.pollEvent(event)) {
+		if (event.type == sf::Event::Closed) {
+			data->closing = true;
+		}
+		if (event.type == sf::Event::TextEntered) {
+			if (event.text.unicode == 8) {
+				if (enteredText.getSize() > 0) {
+					enteredText.erase(enteredText.getSize()-1,1);
+				}
+			}
+			else {
+				if (event.text.unicode >= 0x20) {
+					enteredText += event.text.unicode;
+				}
+			}
+		}
+	}
 	for (auto iterator = data->binds.begin(); iterator != data->binds.end(); iterator++) {
 		data->keys[iterator->second] = sf::Keyboard::isKeyPressed(iterator->first);
 	}
@@ -77,6 +99,12 @@ void SagoCommandQueue::PushCommand(const std::string& cmd) {
 
 void SagoCommandQueue::ClearCommands() {
 	data->queue.clear();
+}
+
+void SagoCommandQueue::UnpressAll() {
+	for(auto& item : data->keys) {
+		item.second = false;
+	}
 }
 
 void SagoCommandQueue::BindKey(const sf::Keyboard::Key& key, const std::string& bindname) {
@@ -102,6 +130,15 @@ bool SagoCommandQueue::MouseMoved() const {
 	return data->mouseMoved;
 }
 
+bool SagoCommandQueue::Closing() const {
+	return data->closing;
+}
+
+sf::String SagoCommandQueue::PopText() {
+	sf::String ret = data->enteredText;
+	data->enteredText.clear();
+	return ret;
+}
 
 const std::vector<std::string> &SagoCommandQueue::GetCommandQueue() const {
 	return data->queue;

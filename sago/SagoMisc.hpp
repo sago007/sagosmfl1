@@ -49,6 +49,8 @@ namespace sago {
 	void WriteFileContent(const char* filename, const std::string& content);
 	
 	void DrawText(sf::RenderWindow &target, sf::Text font, const std::string &text, float x, float y, unsigned int size, sf::Color color = sf::Color::White);
+	
+	void Utf32ToUtf8( const sf::String& source, std::string &dest);
 		
 }  //namespace sago
 

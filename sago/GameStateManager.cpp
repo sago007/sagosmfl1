@@ -29,6 +29,7 @@ namespace sago {
 
 struct GameStateManager::GameStateManagerData {
 	vector<shared_ptr<GameState>  > states;  
+	shared_ptr<GameState> console;
 };
 
 GameStateManager::GameStateManager() {
@@ -43,8 +44,21 @@ void GameStateManager::PushState(std::shared_ptr<GameState> s) {
 	data->states.push_back(s);
 }
 
+void GameStateManager::SetConsole(std::shared_ptr<GameState> s) {
+	data->console = s;
+}
+
+bool GameStateManager::ConsoleOpen() {
+	return static_cast<bool>(data->console);
+}
+
 void GameStateManager::PopInactive() {
-	if (data->states.size() == 0) return;
+	if (data->console && !data->console->IsActive()) {
+		data->console = nullptr;
+	}
+	if (data->states.size() == 0) { 
+		return; 
+	}
 	if (!data->states.back()->IsActive()) {
 		data->states.pop_back();
 		PopInactive();
@@ -62,9 +76,18 @@ void GameStateManager::Draw(sf::RenderWindow &target) {
 	for (size_t i = firstState; i < data->states.size(); i++) {
 		data->states.at(i)->Draw(target);
 	}
+	if (data->console) {
+		data->console->Draw(target);
+	}
 }
 
-void GameStateManager::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
+void GameStateManager::Update(float fDeltaTime, sago::SagoCommandQueue &input) {
+	if (data->console) {
+		data->console->Update(fDeltaTime, input);
+		input.ClearCommands(); //Console eats all commands
+		input.UnpressAll();
+		data->console->UpdateCommandQueue(input);
+	}
 	if (data->states.size() == 0) return;
 	PopInactive();
 	size_t firstState = 0;
@@ -74,7 +97,7 @@ void GameStateManager::Update(float fDeltaTime, const sago::SagoCommandQueue &in
 		}
 	}
 	for (size_t i = firstState; i < data->states.size(); i++) {
-		data->states.at(i)->Update(fDeltaTime,input);
+		data->states.at(i)->Update(fDeltaTime, input);
 	}
 }
 

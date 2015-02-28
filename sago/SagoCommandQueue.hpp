@@ -45,6 +45,10 @@ public:
      */
 	void ClearCommands();
 	/**
+	 * Marks all buttons as unpressed
+	 */
+	void UnpressAll();
+	/**
 	 * Binds a physical key on the keyboard to a named key
 	 * If the physical key was already bound the old bind will be removed
      * @param key Physical key to bind
@@ -64,8 +68,14 @@ public:
      * @return true if the mouse did move. false otherwise
      */
 	bool MouseMoved() const;
+	/**
+	 * Retruns true if the window should close.
+     * @return 
+     */
+	bool Closing() const;
 	const std::vector<std::string> &GetCommandQueue() const;
 	const sf::Vector2i &GetMousePosition() const;
+	sf::String PopText();
 private:
 	SagoCommandQueue(const SagoCommandQueue& base) = delete;
     SagoCommandQueue& operator=(const SagoCommandQueue& base) = delete;
