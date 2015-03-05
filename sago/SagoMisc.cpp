@@ -95,36 +95,14 @@ namespace sago {
 		}
 		size_t inSize = (source.getSize()+1)*sizeof(sf::Uint32);
 		size_t outSize = inSize+1;
-		//char* inBuffer = static_cast<char*>(calloc(inSize,1));
-		std::unique_ptr<char[]> inBuffer(new char[inSize]);
-		/*if (!inBuffer) { 
-			dest = "Out of memory"; 
-			return; 
-		}*/
+		std::unique_ptr<char[]> inBuffer(new char[inSize]());
 		memcpy(static_cast<void*>(inBuffer.get()), source.getData(), source.getSize()*sizeof(sf::Uint32));
-		//char* outBuffer = static_cast<char*>(calloc(outSize,1));
-		std::unique_ptr<char[]> outBuffer(new char[outSize]);
-		/*if (!outBuffer) { 
-			//free(inBuffer); 
-			dest = "Out of memory"; 
-			return; 
-		}*/
+		std::unique_ptr<char[]> outBuffer(new char[outSize]());
 		char* inPtr = inBuffer.get();
 		char* outPtr = outBuffer.get();
 		iconv(ic, &inPtr, &inSize, &outPtr, &outSize );
 		iconv_close(ic);
-		try {
-			dest = outBuffer.get();
-		} 
-		catch (std::exception &e) {
-			//free(inBuffer);
-			//free(outBuffer);
-			cerr << e.what() << endl;
-			dest = "Out of memroy";
-			//return;
-		} 
-		//free(inBuffer);
-		//free(outBuffer);
+		dest = outBuffer.get();
 	}
 	
 }

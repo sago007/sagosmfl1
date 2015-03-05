@@ -75,7 +75,7 @@ public:
 	bool Closing() const;
 	const std::vector<std::string> &GetCommandQueue() const;
 	const sf::Vector2i &GetMousePosition() const;
-	sf::String PopText();
+	sf::String PeakText() const;
 private:
 	SagoCommandQueue(const SagoCommandQueue& base) = delete;
     SagoCommandQueue& operator=(const SagoCommandQueue& base) = delete;

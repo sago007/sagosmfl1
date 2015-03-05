@@ -4,6 +4,9 @@
 
 using namespace std;
 
+namespace {
+	shared_ptr<sago::GameState> console;
+}  //namespace
 
 void ProcessCommands(sago::SagoCommandQueue &cmdQ, sago::SagoDataHolder &dh, sago::GameStateManager &m) {
 	for (size_t i = 0; i < cmdQ.GetCommandQueue().size();i++) {
@@ -17,7 +20,9 @@ void ProcessCommands(sago::SagoCommandQueue &cmdQ, sago::SagoDataHolder &dh, sag
 				m.SetConsole(nullptr);
 			}
 			else {
-				shared_ptr<sago::GameState> console(new GameConsole(dh));
+				if (!console) {
+					console = shared_ptr<sago::GameState>(new GameConsole(dh));
+				}
 				m.SetConsole(console);
 			}
 		}

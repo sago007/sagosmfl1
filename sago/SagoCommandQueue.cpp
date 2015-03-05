@@ -66,16 +66,7 @@ void SagoCommandQueue::ReadKeysAndAddCommands(sf::RenderWindow &window) {
 			data->closing = true;
 		}
 		if (event.type == sf::Event::TextEntered) {
-			if (event.text.unicode == 8) {
-				if (enteredText.getSize() > 0) {
-					enteredText.erase(enteredText.getSize()-1,1);
-				}
-			}
-			else {
-				if (event.text.unicode >= 0x20) {
-					enteredText += event.text.unicode;
-				}
-			}
+			enteredText += event.text.unicode;
 		}
 	}
 	for (auto iterator = data->binds.begin(); iterator != data->binds.end(); iterator++) {
@@ -134,9 +125,8 @@ bool SagoCommandQueue::Closing() const {
 	return data->closing;
 }
 
-sf::String SagoCommandQueue::PopText() {
+sf::String SagoCommandQueue::PeakText() const {
 	sf::String ret = data->enteredText;
-	data->enteredText.clear();
 	return ret;
 }
 

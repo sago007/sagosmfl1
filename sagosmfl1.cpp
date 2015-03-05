@@ -28,7 +28,7 @@ namespace {
 		cmdQ.BindKeyCommand("RETURN","CONFIRM");
 		cmdQ.BindKey(sf::Keyboard::Escape,"ESC");
 		cmdQ.BindKeyCommand("ESC","BACK");
-		cmdQ.BindKey(sf::Keyboard::Tab, "UNDER-ESC");
+		cmdQ.BindKey(sf::Keyboard::F2, "UNDER-ESC");
 		cmdQ.BindKeyCommand("UNDER-ESC","CONSOLE_TOGGLE");
 	}
 	
