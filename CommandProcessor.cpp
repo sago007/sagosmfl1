@@ -21,7 +21,7 @@ void ProcessCommands(sago::SagoCommandQueue &cmdQ, sago::SagoDataHolder &dh, sag
 			}
 			else {
 				if (!console) {
-					console = shared_ptr<sago::GameState>(new GameConsole(dh));
+					console = shared_ptr<sago::GameState>(new GameConsole(dh, m));
 				}
 				m.SetConsole(console);
 			}

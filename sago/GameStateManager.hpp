@@ -73,6 +73,8 @@ public:
      * @param inout
      */
 	void UpdateCommandQueue(sago::SagoCommandQueue &inout);
+	
+	bool ProcessConsoleCommand(const std::vector<std::string>& arg);
 private:
 	GameStateManager(const GameStateManager& base) = delete;
 	GameStateManager& operator=(const GameStateManager& base) = delete;

@@ -39,7 +39,7 @@ public:
      * Is the state blocking states under it?
      * @return true if blocking update
      */
-    virtual bool IsBlockingDraw() = 0;
+    virtual bool IsBlockingDraw() { return false; };
     /**
      * Tells the state to draw itself to target
      * @param target The RenderWindow to draw to
@@ -49,7 +49,7 @@ public:
      * Is the state blocking lower states from updating?
      * @return true if blocking
      */
-    virtual bool IsBlockingUpdate() = 0;
+    virtual bool IsBlockingUpdate() { return false; };
     /**
      * Called reguarly by the game loop if not blocking
      * This is the only input given to a state!
@@ -62,7 +62,14 @@ public:
      * The state should not read from this!
      * @param inout The state may add events to this
      */
-    virtual void UpdateCommandQueue(sago::SagoCommandQueue &inout) = 0;
+    virtual void UpdateCommandQueue(sago::SagoCommandQueue &inout) {};
+	
+	/**
+	 * Process a console command. The console command is given as input. 
+	 * arg[0] is the command as is always filled. Arguments thereafter are optional arguments
+	 * @return true if the command was accpeted. False if the GameStateManager should pass the command to the next layer.
+	 */
+	virtual bool ProcessConsoleCommand(const std::vector<std::string>& arg) { return false; };
 	
 	virtual ~GameState() = default;
 };

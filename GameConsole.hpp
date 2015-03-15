@@ -3,10 +3,11 @@
 
 #include "sago/GameState.hpp"
 #include "sago/SagoDataHolder.hpp"
+#include "sago/GameStateManager.hpp"
 
 class GameConsole : public sago::GameState {
 public:
-	GameConsole(const sago::SagoDataHolder &dataHolder);
+	GameConsole(const sago::SagoDataHolder &dataHolder, sago::GameStateManager& stateManager);
 	~GameConsole();
 	bool IsActive() override;
 	bool IsBlockingDraw() override;
@@ -16,6 +17,7 @@ public:
 	void UpdateCommandQueue(sago::SagoCommandQueue &inout) override;
 private:
 	void ReadEvents(const sago::SagoCommandQueue &cmdQ);
+	void ProcessCommand(const std::string& line);
 	struct GameConsoleImpl;
 	GameConsoleImpl* data;
 };

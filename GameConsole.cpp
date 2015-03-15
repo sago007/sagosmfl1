@@ -7,6 +7,7 @@ using namespace std;
 
 struct GameConsole::GameConsoleImpl {
 	const sago::SagoDataHolder *dataHolder;
+	sago::GameStateManager *stateManager;
 	bool active = true;
 	sf::String currentBuffer;
 	size_t cursorPos = 0;
@@ -15,9 +16,10 @@ struct GameConsole::GameConsoleImpl {
 	list<sf::String> history;
 };
 
-GameConsole::GameConsole(const sago::SagoDataHolder &dataHolder) {
+GameConsole::GameConsole(const sago::SagoDataHolder &dataHolder, sago::GameStateManager& stateManager) {
 	data = new GameConsoleImpl();
 	data->dataHolder = &dataHolder;
+	data->stateManager = &stateManager;
 	data->text.setFont(*dataHolder.getFontPtr("FreeSerif"));
 	data->text.setString(data->currentBuffer);
 	data->text.setCharacterSize(20);
@@ -85,6 +87,15 @@ static void InsertChar (sf::String& text, size_t& pos, sf::Uint32 newChar) {
 	pos++;	
 } 
 
+void GameConsole::ProcessCommand(const std::string& line) {
+	vector<std::string> arg;
+	arg.push_back(line);
+	bool processed = data->stateManager->ProcessConsoleCommand(arg);
+	if (!processed) {
+		cerr << "Failed to process: " << line << endl;
+	}
+}
+
 void GameConsole::ReadEvents(const sago::SagoCommandQueue &cmdQ) {
 	sf::String inText = cmdQ.PeakText();
 	for (sf::Uint32 item : inText) {
@@ -92,6 +103,7 @@ void GameConsole::ReadEvents(const sago::SagoCommandQueue &cmdQ) {
 			string outputText;
 			sago::Utf32ToUtf8(data->currentBuffer, outputText);
 			cout << outputText << endl;
+			ProcessCommand(outputText);
 			data->currentBuffer.clear();
 			data->cursorPos = 0;
 		}

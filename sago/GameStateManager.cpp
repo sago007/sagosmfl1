@@ -114,4 +114,12 @@ void GameStateManager::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
 	}
 }
 
+bool GameStateManager::ProcessConsoleCommand(const std::vector<std::string>& arg) {
+	bool isDone = false;
+	for (size_t i = data->states.size(); i > 0 && !isDone ; i--) {
+		isDone = data->states.at(i-1)->ProcessConsoleCommand(arg);
+	}
+	return isDone;  //still false if no layer accepted the command.
+}
+
 }  //namespace sago

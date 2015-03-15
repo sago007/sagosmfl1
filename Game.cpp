@@ -42,6 +42,7 @@ struct Game::GameImpl {
 	World mainworld;
 	shared_ptr<TileManager> tileManager;
 	Store store;
+	bool drawCollision = true;
 };
 
 static void CreateTiles( TileManager &manager) {
@@ -103,22 +104,26 @@ static void CheckCollision(vector<shared_ptr<Placeable> > &placeables) {
 	
 }
 
-static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY) {
+static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY, bool drawCollision) {
 	string animation = "standing";
 	if (entity->moving) {
 		animation = "walkcycle";
 	}
-	sf::CircleShape circle(entity->Radius);
-	circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
-	target.draw(circle);
+	if (drawCollision) {
+		sf::CircleShape circle(entity->Radius);
+		circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
+		target.draw(circle);
+	}
 	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->race + "_"+animation+"_"+string(1,entity->direction));
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, long long offsetX, long long offsetY) {
-	sf::CircleShape circle(entity->Radius);
-	circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
-	target.draw(circle);
+static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, long long offsetX, long long offsetY, bool drawCollision) {
+	if (drawCollision) {
+		sf::CircleShape circle(entity->Radius);
+		circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
+		target.draw(circle);
+	}
 	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->sprite);
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
@@ -149,11 +154,11 @@ void Game::Draw(sf::RenderWindow &target) {
 	for (const auto& placeable : data->placeables) {
 		const MistItem *m = dynamic_cast<MistItem*>(placeable.get());
 		if (m) {
-			DrawMiscItem(target, data->sprites, m, data->time, data->center_x-1024/2, data->center_y-768/2);
+			DrawMiscItem(target, data->sprites, m, data->time, data->center_x-1024/2, data->center_y-768/2, data->drawCollision);
 		}
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
-			DrawHumanEntity(target, data->sprites, h, data->time, data->center_x-1024/2, data->center_y-768/2);
+			DrawHumanEntity(target, data->sprites, h, data->time, data->center_x-1024/2, data->center_y-768/2, data->drawCollision);
 		}
 	}
 }
@@ -253,4 +258,12 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 
 void Game::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
 	
+}
+
+bool Game::ProcessConsoleCommand(const std::vector<std::string>& arg) {
+	if (arg.at(0) == "drawcollision") {
+		data->drawCollision = !data->drawCollision;
+		return true;
+	}
+	return false;
 }
