@@ -2,6 +2,7 @@
 #include "sago/SagoMisc.hpp"
 #include <iostream>
 #include <list>
+#include <boost/tokenizer.hpp>
 
 using namespace std;
 
@@ -58,10 +59,6 @@ void GameConsole::Update(float fDeltaTime, const sago::SagoCommandQueue &input) 
 	ReadEvents(input);
 }
 
-void GameConsole::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
-	
-}
-
 static void InsertChar (sf::String& text, size_t& pos, sf::Uint32 newChar) {
 	if (pos > text.getSize()) {
 		return;
@@ -89,10 +86,18 @@ static void InsertChar (sf::String& text, size_t& pos, sf::Uint32 newChar) {
 
 void GameConsole::ProcessCommand(const std::string& line) {
 	vector<std::string> arg;
-	arg.push_back(line);
+	boost::escaped_list_separator<char> els('\\',' ','\"');
+	boost::tokenizer<boost::escaped_list_separator<char> > tok(line, els);
+	for (const string& item : tok) {
+		arg.push_back(item);
+	}
 	bool processed = data->stateManager->ProcessConsoleCommand(arg);
 	if (!processed) {
-		cerr << "Failed to process: " << line << endl;
+		cerr << "Failed to process: " << arg.at(0) ;
+		for (size_t i = 1; i < arg.size(); ++i) {
+			cerr << " \"" << arg.at(i) << "\"";
+		}
+		cerr << endl;
 	}
 }
 
@@ -102,7 +107,6 @@ void GameConsole::ReadEvents(const sago::SagoCommandQueue &cmdQ) {
 		if (item == 13 /* carriage return*/) {
 			string outputText;
 			sago::Utf32ToUtf8(data->currentBuffer, outputText);
-			cout << outputText << endl;
 			ProcessCommand(outputText);
 			data->currentBuffer.clear();
 			data->cursorPos = 0;

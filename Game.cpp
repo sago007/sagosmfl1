@@ -72,11 +72,6 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	*p2 = *p;
 	p2->X = 100.0;
 	data->placeables.push_back(p2);
-	stringstream ss;
-	boost::archive::xml_oarchive archive(ss);
-	archive << boost::serialization::make_nvp("world", data->mainworld);
-	string world = ss.str();
-	sago::WriteFileContent("myWorld.txt",world);
 }
 
 Game::~Game() {
@@ -148,9 +143,7 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int drawHeight = 30;
 	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, 
 	(data->center_x)/tileSize-(1024/tileSize)/2-1, (data->center_y)/tileSize-(768/tileSize)/2-1);
-	
 	sort(data->placeables.begin(), data->placeables.end(), sort_placeable);
-	
 	for (const auto& placeable : data->placeables) {
 		const MistItem *m = dynamic_cast<MistItem*>(placeable.get());
 		if (m) {
@@ -260,9 +253,25 @@ void Game::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
 	
 }
 
+static void StoreWorld (const World& w, const string& filename) {
+	stringstream ss;
+	boost::archive::xml_oarchive archive(ss);
+	archive << boost::serialization::make_nvp("world", w);
+	string world = ss.str();
+	sago::WriteFileContent(filename.c_str(), world);
+}
+
 bool Game::ProcessConsoleCommand(const std::vector<std::string>& arg) {
 	if (arg.at(0) == "drawcollision") {
 		data->drawCollision = !data->drawCollision;
+		return true;
+	}
+	if (arg.at(0) == "storeworld") {
+		if (arg.size() < 2) {
+			cerr << "Missing argument to storeworld: \"storeworld FILENAME\"" << endl;
+			return true;  //We still matched ti
+		}
+		StoreWorld(data->mainworld, arg.at(1));
 		return true;
 	}
 	return false;
