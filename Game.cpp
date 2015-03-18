@@ -261,6 +261,14 @@ static void StoreWorld (const World& w, const string& filename) {
 	sago::WriteFileContent(filename.c_str(), world);
 }
 
+static void RestoreWorld (World& w, const string& filename) {
+	string input = sago::GetFileContent(filename.c_str());
+	stringstream ss;
+	ss.str(input);
+	boost::archive::xml_iarchive archive(ss);
+	archive >> boost::serialization::make_nvp("world", w);
+}
+
 bool Game::ProcessConsoleCommand(const std::vector<std::string>& arg) {
 	if (arg.at(0) == "drawcollision") {
 		data->drawCollision = !data->drawCollision;
@@ -272,6 +280,14 @@ bool Game::ProcessConsoleCommand(const std::vector<std::string>& arg) {
 			return true;  //We still matched ti
 		}
 		StoreWorld(data->mainworld, arg.at(1));
+		return true;
+	}
+	if (arg.at(0) == "restoreworld") {
+		if (arg.size() < 2) {
+			cerr << "Missing argument to storeworld: \"storeworld FILENAME\"" << endl;
+			return true;  //We still matched ti
+		}
+		RestoreWorld(data->mainworld, arg.at(1));
 		return true;
 	}
 	return false;
