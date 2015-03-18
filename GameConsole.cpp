@@ -91,7 +91,14 @@ void GameConsole::ProcessCommand(const std::string& line) {
 	for (const string& item : tok) {
 		arg.push_back(item);
 	}
-	bool processed = data->stateManager->ProcessConsoleCommand(arg);
+	bool processed = false;
+	try {
+		processed = data->stateManager->ProcessConsoleCommand(arg);
+	} catch (exception& e) {
+		cerr << "std::exception: " << e.what() << endl;
+	}
+	catch (...) {
+	}
 	if (!processed) {
 		cerr << "Failed to process: " << arg.at(0) ;
 		for (size_t i = 1; i < arg.size(); ++i) {
