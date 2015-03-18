@@ -9,10 +9,10 @@
 #define	WORLD_HPP
 
 #include "TileManager.hpp"
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/vector.hpp>
+#include "cereal/cereal.hpp"
+#include "cereal/types/vector.hpp"
+#include "cereal/types/map.hpp"
+#include "cereal/types/utility.hpp"
 
 
 struct WorldPart {
@@ -51,25 +51,23 @@ public:
 	std::map<std::pair<long long, long long>, WorldPart> worldParts;
 };
 
-namespace boost {
-namespace serialization {
-
+namespace cereal {
+	
 template<class Archive>
-void serialize(Archive & ar, WorldPart & wp, const unsigned int version)
+void serialize(Archive & archive,
+               WorldPart & m)
 {
-	ar & BOOST_SERIALIZATION_NVP(wp.tiles);
+  archive( cereal::make_nvp("Tiles", m.tiles) );
 }
 
 template<class Archive>
-void serialize(Archive & ar, World & w, const unsigned int version)
+void serialize(Archive & archive,
+               World & m)
 {
-	ar & BOOST_SERIALIZATION_NVP(w.sizeX);
-	ar & BOOST_SERIALIZATION_NVP(w.sizeY);
-	ar & BOOST_SERIALIZATION_NVP(w.worldParts);
+  archive( cereal::make_nvp("sizeX", m.sizeX), cereal::make_nvp("sizeY", m.sizeY),  cereal::make_nvp("WorldParts", m.worldParts) );
 }
-
-} // namespace serialization
-} // namespace boost
+	
+}
 
 #endif	/* WORLD_HPP */
 

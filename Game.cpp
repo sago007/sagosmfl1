@@ -13,6 +13,7 @@
 #include "model/World.hpp"
 #include <iostream>
 #include <sstream>
+#include <cereal/archives/xml.hpp>
 #include <bits/shared_ptr.h>
 #include "sago/SagoSprite.hpp"
 #include "sago/SagoSpriteHolder.hpp"
@@ -255,8 +256,10 @@ void Game::UpdateCommandQueue(sago::SagoCommandQueue &inout) {
 
 static void StoreWorld (const World& w, const string& filename) {
 	stringstream ss;
-	boost::archive::xml_oarchive archive(ss);
-	archive << boost::serialization::make_nvp("world", w);
+	{
+		cereal::XMLOutputArchive archive( ss );
+		archive( w );
+	}  //Cereal writes to stream on destruction
 	string world = ss.str();
 	sago::WriteFileContent(filename.c_str(), world);
 }
@@ -265,8 +268,8 @@ static void RestoreWorld (World& w, const string& filename) {
 	string input = sago::GetFileContent(filename.c_str());
 	stringstream ss;
 	ss.str(input);
-	boost::archive::xml_iarchive archive(ss);
-	archive >> boost::serialization::make_nvp("world", w);
+	cereal::XMLInputArchive archive(ss);
+	archive (w);
 }
 
 bool Game::ProcessConsoleCommand(const std::vector<std::string>& arg) {
