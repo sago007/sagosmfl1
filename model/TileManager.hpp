@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include "cereal/types/map.hpp"
 
 
 class TileManager {
@@ -20,6 +21,15 @@ public:
 	const Tile& GetTile(int id) const;
 	void AddTile(const Tile &tile);
 	int GetId(const std::string &name);
+	std::map<int, int> getMapperFrom( const TileManager& source);
+	template<class Archive> 
+	void save(Archive & archive) const {
+		archive( idMap ); 
+	}
+	template<class Archive> 
+	void load(Archive & archive) {
+		archive( idMap ); 
+	}
 private:
 	std::vector<Tile> tiles;
 	std::map<std::string,int> idMap;

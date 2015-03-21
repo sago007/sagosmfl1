@@ -18,6 +18,10 @@ public:
 	std::string name;
 	std::string sprite;
 	bool blocking = false;
+	template<class Archive>
+	void serialize(Archive & archive) {
+		archive( internalId, name, sprite ); 
+	}
 };
 
 class Placeable {

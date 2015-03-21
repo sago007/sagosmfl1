@@ -54,17 +54,37 @@ public:
 namespace cereal {
 	
 template<class Archive>
-void serialize(Archive & archive,
-               WorldPart & m)
-{
-  archive( cereal::make_nvp("Tiles", m.tiles) );
+void save(Archive & archive, WorldPart const & m) {
+	archive( cereal::make_nvp("Tiles", m.tiles) );
 }
 
 template<class Archive>
-void serialize(Archive & archive,
-               World & m)
-{
-  archive( cereal::make_nvp("sizeX", m.sizeX), cereal::make_nvp("sizeY", m.sizeY),  cereal::make_nvp("WorldParts", m.worldParts) );
+void load(Archive & archive, WorldPart & m) {
+	archive( cereal::make_nvp("Tiles", m.tiles) );
+}
+
+template<class Archive>
+void save(Archive & archive, World const & m) {
+	archive( cereal::make_nvp("TileManager", *(m.tileManager.get())), cereal::make_nvp("sizeX", m.sizeX), cereal::make_nvp("sizeY", m.sizeY),  cereal::make_nvp("WorldParts", m.worldParts) );
+}
+
+/**
+ * This template function loads from an archive into a World.
+ * World must already have the TileManager set because the tranforming is done using that.
+ * @param archive
+ * @param m
+ */
+template<class Archive>
+void load(Archive & archive, World & m) {
+	TileManager tileM;
+	archive >> cereal::make_nvp("TileManager", tileM);
+	std::map<int, int> tileMapperForLoading = m.tileManager->getMapperFrom(tileM);
+	archive( cereal::make_nvp("sizeX", m.sizeX), cereal::make_nvp("sizeY", m.sizeY),  cereal::make_nvp("WorldParts", m.worldParts) );
+	for (auto& parts : m.worldParts) {
+		for (int& tile : parts.second.tiles) {
+			tile = tileMapperForLoading[tile];
+		}
+	}
 }
 	
 }

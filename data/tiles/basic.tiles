@@ -13,6 +13,11 @@
 "clay" :  {
 	"sprite" : "terrain_clay_center",
 	"blocking" : 1
+},
+
+"brik_floor" : {
+	"sprite" : "terrain_brik_floor_center",
+	"blocking" : 0
 }
 
 }

@@ -59,3 +59,11 @@ void TileReadFile(TileManager &tileManager, const std::string &filename) {
 		cout << "Added " << t.name << " with id: " << t.internalId << endl;
 	}
 }
+
+std::map<int, int> TileManager::getMapperFrom( const TileManager& source) {
+	std::map<int, int> ret;
+	for (const auto& item : source.idMap) {
+		ret[item.second] = GetId(item.first);
+	}
+	return ret;
+}
