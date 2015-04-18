@@ -14,7 +14,10 @@ struct GameConsole::GameConsoleImpl {
 	size_t cursorPos = 0;
 	sf::Text text;
 	sf::RectangleShape background;
-	list<sf::String> history;
+	vector<sf::String> history;
+	int historyTop = 0;
+	int historySize = 30000;
+	int historyPos = 0;
 };
 
 GameConsole::GameConsole(const sago::SagoDataHolder &dataHolder, sago::GameStateManager& stateManager) {
@@ -26,6 +29,9 @@ GameConsole::GameConsole(const sago::SagoDataHolder &dataHolder, sago::GameState
 	data->text.setCharacterSize(20);
 	data->text.setColor(sf::Color::White);
 	data->background.setFillColor(sf::Color(0,0,0,200));
+	if (data->history.size() < (size_t)data->historySize) {
+		data->history.resize(data->historySize);
+	}
 	cerr << "Created console" << endl;
 }
 
@@ -43,6 +49,45 @@ bool GameConsole::IsBlockingDraw()  {
 
 bool GameConsole::IsBlockingUpdate()  {
 	return false;
+}
+
+void GameConsole::HistoryGetAt(int index, sf::String& output) {
+	int realIndex = (index+data->historyTop)%data->historySize;
+	if (realIndex < 0) {
+		realIndex += data->historySize;
+	}
+	output = data->history.at(realIndex);
+	
+}
+void GameConsole::HistoryPush(const sf::String &input) {
+	if (data->history.at(data->historyTop) == input || input == "") {
+		return; //data identical to top or blank
+	}	
+	data->historyTop++;
+	if (data->historyTop >= data->historySize) {
+		data->historyTop = 0;
+	}
+	data->history.at(data->historyTop) = input;
+}
+
+
+void GameConsole::HistoryUp() {
+	if (data->historyPos == 0) {
+		HistoryPush(data->currentBuffer);
+	}
+	data->historyPos--;
+	HistoryGetAt(data->historyPos, data->currentBuffer);
+	if (data->currentBuffer == "") {
+		data->historyPos++;
+		HistoryGetAt(data->historyPos, data->currentBuffer);
+	}
+}
+
+void GameConsole::HistoryDown() {
+	if (data->historyPos < 0) {
+		data->historyPos++;
+		HistoryGetAt(data->historyPos, data->currentBuffer);
+	}
 }
 
 void GameConsole::Draw(sf::RenderWindow &target) {
@@ -109,12 +154,24 @@ void GameConsole::ProcessCommand(const std::string& line) {
 }
 
 void GameConsole::ReadEvents(const sago::SagoCommandQueue &cmdQ) {
+	for (size_t i = 0; i < cmdQ.GetCommandQueue().size(); i++) {
+			std::string cmd = cmdQ.GetCommandQueue().at(i);
+		if (cmd == "UP") {
+			HistoryUp();
+			return;
+		}
+		if (cmd == "DOWN") {
+			HistoryDown();
+			return;
+		}
+	}
 	sf::String inText = cmdQ.PeakText();
 	for (sf::Uint32 item : inText) {
 		if (item == 13 /* carriage return*/) {
 			string outputText;
 			sago::Utf32ToUtf8(data->currentBuffer, outputText);
 			ProcessCommand(outputText);
+			HistoryPush(outputText);
 			data->currentBuffer.clear();
 			data->cursorPos = 0;
 		}
