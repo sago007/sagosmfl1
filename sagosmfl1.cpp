@@ -48,7 +48,11 @@ namespace {
 		PHYSFS_init(argv[0]);
 		std::string baseSearchPath = PHYSFS_getBaseDir();
 		baseSearchPath += "/data/";
-		PHYSFS_addToSearchPath(baseSearchPath.c_str(), 0); std::string baseWritePath = PHYSFS_getBaseDir();
+		PHYSFS_addToSearchPath(baseSearchPath.c_str(), 0); 
+		string gamename = "sagosmfl1";
+		std::string baseWritePath = sago::GetHomeFolder(gamename);
+		sago::CreateHomeFolder(gamename);
+		PHYSFS_addToSearchPath(baseWritePath.c_str(), 1);
 		int errorCode = PHYSFS_setWriteDir(baseWritePath.c_str());
 		if (errorCode == 0) {
 			cerr <<  PHYSFS_getLastError() << endl;
@@ -73,37 +77,39 @@ namespace {
 
 int main(int argc, const char* argv[])
 {
-	ArgAndPhysInit(argc,argv);
-	BaseItems base;
-	sf::RenderWindow window(sf::VideoMode(1024, 768), "Sago test 1");
-	sago::GameStateManager stateManager;
-	std::shared_ptr<sago::GameState> menu(new MainMenu(*base.dataHolder));
-	stateManager.PushState(menu);
-	sf::Clock clock;  //start the clock
-	sf::Int32 lastFrameTime = 0;
-	while (window.isOpen()) {
-		sf::Int32 frameTime = clock.getElapsedTime().asMilliseconds();
-		sf::Int32 deltaTime = frameTime - lastFrameTime;
-		float fDeltaTime = static_cast<float>(deltaTime);
-		lastFrameTime = frameTime;
-		base.cmdQ->ReadKeysAndAddCommands(window);
-		if (base.cmdQ->Closing()) {
-			window.close();
-		}
-		ProcessCommands(*base.cmdQ,*base.dataHolder,stateManager);
-		stateManager.Update(fDeltaTime,*base.cmdQ);
-		base.cmdQ->ClearCommands();
-		stateManager.UpdateCommandQueue(*base.cmdQ);
-		for (const std::string &cmd : base.cmdQ->GetCommandQueue()) {
-			if (cmd == "QUIT") {
+	ArgAndPhysInit(argc, argv);
+	{
+		BaseItems base;
+		sf::RenderWindow window(sf::VideoMode(1024, 768), "Sago test 1");
+		sago::GameStateManager stateManager;
+		std::shared_ptr<sago::GameState> menu(new MainMenu(*base.dataHolder));
+		stateManager.PushState(menu);
+		sf::Clock clock;  //start the clock
+		sf::Int32 lastFrameTime = 0;
+		while (window.isOpen()) {
+			sf::Int32 frameTime = clock.getElapsedTime().asMilliseconds();
+			sf::Int32 deltaTime = frameTime - lastFrameTime;
+			float fDeltaTime = static_cast<float>(deltaTime);
+			lastFrameTime = frameTime;
+			base.cmdQ->ReadKeysAndAddCommands(window);
+			if (base.cmdQ->Closing()) {
 				window.close();
 			}
+			ProcessCommands(*base.cmdQ,*base.dataHolder,stateManager);
+			stateManager.Update(fDeltaTime,*base.cmdQ);
+			base.cmdQ->ClearCommands();
+			stateManager.UpdateCommandQueue(*base.cmdQ);
+			for (const std::string &cmd : base.cmdQ->GetCommandQueue()) {
+				if (cmd == "QUIT") {
+					window.close();
+				}
+			}
+			window.clear();
+			stateManager.Draw(window);
+			base.fc->Draw(window,frameTime);
+			window.display();
+			usleep(100);
 		}
-		window.clear();
-		stateManager.Draw(window);
-		base.fc->Draw(window,frameTime);
-		window.display();
-		usleep(100);
 	}
 	PHYSFS_deinit();
 	return 0;

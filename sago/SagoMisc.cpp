@@ -43,6 +43,10 @@ namespace sago {
 		return ret;
 	}
 	
+	bool FileExists(const char* filename) {
+		return PHYSFS_exists(filename);
+	}
+	
 	std::string GetFileContent(const char* filename) {
 		std::string ret;
 		if (!PHYSFS_exists(filename)) {
@@ -103,6 +107,32 @@ namespace sago {
 		iconv(ic, &inPtr, &inSize, &outPtr, &outSize );
 		iconv_close(ic);
 		dest = outBuffer.get();
+	}
+	
+	std::string GetHomeFolder( const std::string& gamename) {
+#if defined(__unix__)
+        string home = (string)getenv("HOME")+(string)"/.gamesaves/"+gamename;
+#elif defined(_WIN32)
+        string home = (string)getMyDocumentsPath()+(string)"/My Games/"+gamename;
+#endif
+		return home;
+	}
+	
+	void CreateHomeFolder( const std::string& gamename) {
+#if defined(__unix__)
+        //Compiler warns about unused result. The users envisonment should normally give the user all the information he needs
+		string command = "mkdir -p \""+GetHomeFolder(gamename)+"\"";
+        if(system( command.c_str())) {
+			cerr << "command \"" << command << "\" failed!" << endl;
+		}
+#elif defined(_WIN32)
+        //Now for Windows NT/2k/xp/2k3 etc.
+        string tempA = getMyDocumentsPath()+"\\My Games";
+        CreateDirectory(tempA.c_str(),NULL);
+        tempA = getMyDocumentsPath()+(std::string)"\\My Games\\"+gamename;
+        CreateDirectory(tempA.c_str(),NULL);
+#endif
+
 	}
 	
 }

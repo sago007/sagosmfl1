@@ -46,6 +46,8 @@ namespace sago {
      */
 	std::string GetFileContent(const char* filename);
 	
+	bool FileExists(const char* filename);
+	
 	void WriteFileContent(const char* filename, const std::string& content);
 	
 	void DrawText(sf::RenderWindow &target, sf::Text font, const std::string &text, float x, float y, unsigned int size, sf::Color color = sf::Color::White);
@@ -57,6 +59,9 @@ namespace sago {
      * @param dest The destination string. Will be left unchanged in case of an error. 
      */
 	void Utf32ToUtf8( const sf::String& source, std::string &dest);
+	
+	std::string GetHomeFolder( const std::string& gamename);
+	void CreateHomeFolder( const std::string& gamename);
 		
 }  //namespace sago
 

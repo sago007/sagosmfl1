@@ -21,6 +21,9 @@
 
 using namespace std;
 
+static void StoreWorld (const World& w, const string& filename);
+static void RestoreWorld (World& w, const string& filename);
+
 /**
  * This sort method sorts the elements from furthest to screen to closest to screen, so that elemnets closer to the screen will be drawn last
  * @param lhs Left hand side
@@ -62,7 +65,12 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 	data->placeables.push_back(human);
 	data->human = human;
 	CreateTiles(*(data->tileManager));
-	data->mainworld.MakeExample();
+	if (sago::FileExists("mainworld.xml")) {
+		RestoreWorld(data->mainworld, "mainworld.xml");
+	}
+	else {
+		data->mainworld.MakeExample();
+	}
 	shared_ptr<MistItem> p(new MistItem());
 	p->Radius = 16.0;
 	p->X = 50.0;
@@ -76,6 +84,7 @@ Game::Game(const sago::SagoDataHolder &dataHolder) {
 }
 
 Game::~Game() {
+	StoreWorld(data->mainworld, "mainworld.xml");
 	delete data;
 }
 
