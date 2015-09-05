@@ -30,6 +30,16 @@
 	"width" : 32,
 	"number_of_frames" : 1,
 	"frame_time" : 100
+},
+
+"terrain_water_center" : {
+    "texture" : "terrain",
+	"topx" : 864,
+	"topy" : 160,
+	"height" : 32,
+	"width" : 32,
+	"number_of_frames" : 1,
+	"frame_time" : 1000
 }
 
 }

@@ -18,6 +18,11 @@
 "brik_floor" : {
 	"sprite" : "terrain_brik_floor_center",
 	"blocking" : 0
+},
+
+"water" : {
+	"sprite" : "terrain_water_center",
+	"blocking" : 1
 }
 
 }
