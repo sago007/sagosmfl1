@@ -41,7 +41,7 @@ struct SagoCommandQueue::SagoCommandQueueData {
 	std::unordered_map<std::string,bool> keys;
 	sf::Vector2i mousePosition = sf::Vector2i(0, 0);
 	bool mouseMoved = false;
-	std::map<sf::Keyboard::Key, std::string> binds;
+	std::multimap<sf::Keyboard::Key, std::string> binds;
 	std::map<sf::Mouse::Button, std::string> mouseBinds;
 	std::vector<BoundCommand> bindCommands;
 	sf::String enteredText;
@@ -69,8 +69,15 @@ void SagoCommandQueue::ReadKeysAndAddCommands(sf::RenderWindow &window) {
 			enteredText += event.text.unicode;
 		}
 	}
+	//First assume that all keys are not pressed
+	for (auto iterator = data->keys.begin(); iterator != data->keys.end(); iterator++) {
+		iterator->second = false;
+	}
+	//Now if at least one bound key is pressed then it is pressed!
 	for (auto iterator = data->binds.begin(); iterator != data->binds.end(); iterator++) {
-		data->keys[iterator->second] = sf::Keyboard::isKeyPressed(iterator->first);
+		if (sf::Keyboard::isKeyPressed(iterator->first)) {
+			data->keys[iterator->second] = true;
+		}
 	}
 	for (BoundCommand &item : data->bindCommands) {
 		bool pressed = data->keys[item.bindname];
@@ -99,7 +106,8 @@ void SagoCommandQueue::UnpressAll() {
 }
 
 void SagoCommandQueue::BindKey(const sf::Keyboard::Key& key, const std::string& bindname) {
-	data->binds[key] = bindname;
+	//data->binds[key] = bindname;
+	data->binds.insert(std::pair<sf::Keyboard::Key, std::string>(key,bindname));
 }
 
 void SagoCommandQueue::BindMouseButton(const sf::Mouse::Button &b, const std::string &bindname) {

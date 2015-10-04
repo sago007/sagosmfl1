@@ -16,7 +16,7 @@
 class Game : public sago::GameState {
 public:
 	Game(const sago::SagoDataHolder &dataHolder);
-	~Game();
+	~Game() override;
 	bool IsActive() override;
 	bool IsBlockingDraw() override;
 	bool IsBlockingUpdate() override;

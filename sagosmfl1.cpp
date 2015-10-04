@@ -19,11 +19,15 @@ using namespace std;
 namespace {
 	void SetStandardKeyBinds(sago::SagoCommandQueue &cmdQ) {
 		cmdQ.BindKey(sf::Keyboard::Up,"UP");
+		cmdQ.BindKey(sf::Keyboard::W,"UP");
 		cmdQ.BindKeyCommand("UP","UP");
 		cmdQ.BindKey(sf::Keyboard::Down,"DOWN");
+		cmdQ.BindKey(sf::Keyboard::S,"DOWN");
 		cmdQ.BindKeyCommand("DOWN","DOWN");
 		cmdQ.BindKey(sf::Keyboard::Left,"LEFT");
 		cmdQ.BindKey(sf::Keyboard::Right,"RIGHT");
+		cmdQ.BindKey(sf::Keyboard::A,"LEFT");
+		cmdQ.BindKey(sf::Keyboard::D,"RIGHT");
 		cmdQ.BindKey(sf::Keyboard::Return,"RETURN");
 		cmdQ.BindKeyCommand("RETURN","CONFIRM");
 		cmdQ.BindKey(sf::Keyboard::Escape,"ESC");
