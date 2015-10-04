@@ -10,19 +10,19 @@
 World::World() {
 }
 
-void World::SetSizeX(long long size) {
+void World::SetSizeX(int size) {
 	this->sizeX = size;
 }
 
-long long World::GetSizeX() const {
+int World::GetSizeX() const {
 	return sizeX;
 }
 
-void World::SetSizeY(long long sizeY) {
+void World::SetSizeY(int sizeY) {
 	this->sizeY = sizeY;
 }
 
-long long World::GetSizeY() const {
+int World::GetSizeY() const {
 	return sizeY;
 }
 
@@ -48,22 +48,22 @@ World::~World() {
  * @param y Y coordinate. Must be positive
  * @return The file
  */
-int World::GetTile (long long x, long long y) {
+int World::GetTile (int x, int y) {
 	if (x < 0 ||  y < 0) {
 		return 0;
 	}
-	std::pair<long long, long long> location = {x / 50, y / 50};
+	std::pair<int, int> location = {x / 50, y / 50};
 	return (this->worldParts[location]).GetTile(x%50, y%50);
 }
 
-void World::SetTile(long long x, long long y, int tile) {
-	std::pair<long long, long long> location = {x / 50, y / 50};
+void World::SetTile(int x, int y, int tile) {
+	std::pair<int, int> location = {x / 50, y / 50};
 	(this->worldParts[location]).SetTile( x%50, y%50, tile);
 }
 
 void World::MakeExample() {
-	for (long long x = 0; x < GetSizeX(); x ++) {
-		for ( long long y = 0; y < GetSizeY(); y++) {
+	for (int x = 0; x < GetSizeX(); x ++) {
+		for ( int y = 0; y < GetSizeY(); y++) {
 			if (x > 10 && x < 20 && y > 5 && y <25) { 
 				SetTile(x, y, tileManager->GetId("clay"));
 			}

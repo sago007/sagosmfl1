@@ -36,19 +36,19 @@ public:
 	
 	void MakeExample();
 	
-	int GetTile (long long x, long long y);
-	void SetTile ( long long x, long long y, int tile);
-    void SetSizeX(long long size);
-    long long GetSizeX() const;
-    void SetSizeY(long long sizeY);
-    long long GetSizeY() const;
+	int GetTile (int x, int y);
+	void SetTile ( int x, int y, int tile);
+    void SetSizeX(int size);
+    int GetSizeX() const;
+    void SetSizeY(int sizeY);
+    int GetSizeY() const;
     void SetTileManager(std::shared_ptr<TileManager> tileManager);
 	const std::shared_ptr<TileManager>& GetTileManager() const; 
 //private:
-	long long sizeX = 1000;
-	long long sizeY = 1000;
+	int sizeX = 1000;
+	int sizeY = 1000;
 	std::shared_ptr<TileManager> tileManager;
-	std::map<std::pair<long long, long long>, WorldPart> worldParts;
+	std::map<std::pair<int, int>, WorldPart> worldParts;
 };
 
 namespace cereal {

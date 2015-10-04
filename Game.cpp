@@ -42,8 +42,8 @@ struct Game::GameImpl {
 	float time = 0.0;
 	shared_ptr<Human> human;
 	sf::Vector2f mousePos;
-	long long center_x = 0;
-	long long center_y = 0;
+	int center_x = 0;
+	int center_y = 0;
 	World mainworld;
 	shared_ptr<TileManager> tileManager;
 	Store store;
@@ -110,7 +110,7 @@ static void CheckCollision(vector<shared_ptr<Placeable> > &placeables) {
 	
 }
 
-static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, long long offsetX, long long offsetY, bool drawCollision) {
+static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const Human *entity, float time, int offsetX, int offsetY, bool drawCollision) {
 	string animation = "standing";
 	if (entity->moving) {
 		animation = "walkcycle";
@@ -124,7 +124,7 @@ static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, long long offsetX, long long offsetY, bool drawCollision) {
+static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, int offsetX, int offsetY, bool drawCollision) {
 	if (drawCollision) {
 		sf::CircleShape circle(entity->Radius);
 		circle.setPosition(entity->X-offsetX-16, entity->Y-offsetY-16);
@@ -134,7 +134,7 @@ static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::S
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, World& world, long long worldX, long long worldY, int tileSize, int mouseTileX, int mouseTileY) {
+void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, World& world, int worldX, int worldY, int tileSize, int mouseTileX, int mouseTileY) {
 	
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
@@ -183,12 +183,12 @@ void Game::Draw(sf::RenderWindow &target) {
 			mouseTileX << ", " << mouseTileY << ")" << endl;*/
 }
 
-static vector<pair<long long int, long long int> > getTouchingTiles(const Placeable* entity) {
-	const long long int tileSize = 32;
-	vector<pair<long long int, long long int> > res;
-	vector<pair<long long int, long long int> > candidates;
-	for (long long int i = floor((entity->X-entity->Radius) / tileSize); i < (entity->X+entity->Radius)/ tileSize ; i++ ) {
-		for (long long int j = floor((entity->Y-entity->Radius) / tileSize); j < (entity->Y+entity->Radius)/ tileSize ; j++ ) {
+static vector<pair<int, int> > getTouchingTiles(const Placeable* entity) {
+	const int tileSize = 32;
+	vector<pair<int, int> > res;
+	vector<pair<int, int> > candidates;
+	for (int i = floor((entity->X-entity->Radius) / tileSize); i < (entity->X+entity->Radius)/ tileSize ; i++ ) {
+		for (int j = floor((entity->Y-entity->Radius) / tileSize); j < (entity->Y+entity->Radius)/ tileSize ; j++ ) {
 			candidates.push_back(make_pair(i,j));
 		}
 	}

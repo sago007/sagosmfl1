@@ -20,8 +20,8 @@ public:
 	std::vector<Tile> GetTiles();
 	virtual ~Store();
 private:
-	long long int sizeX = 0;
-	long long int sizeY = 0;
+	int sizeX = 0;
+	int sizeY = 0;
 	unsigned int baseTile = 0;
 	std::unique_ptr<cppdb::session> sql;
 };
