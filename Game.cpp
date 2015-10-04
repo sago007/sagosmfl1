@@ -41,6 +41,7 @@ struct Game::GameImpl {
 	std::shared_ptr<sago::SagoSpriteHolder> sprites;
 	float time = 0.0;
 	shared_ptr<Human> human;
+	sf::Vector2f mousePos;
 	long long center_x = 0;
 	long long center_y = 0;
 	World mainworld;
@@ -133,7 +134,7 @@ static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::S
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
-void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, World& world, long long worldX, long long worldY) {
+void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int width, int height, World& world, long long worldX, long long worldY, int tileSize, int mouseTileX, int mouseTileY) {
 	
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
@@ -142,7 +143,15 @@ void Game::DrawTiles(sf::RenderWindow &target, int topXpixel, int topYpixel, int
 				continue;
 			}
 			const sago::SagoSprite &sprite = data->sprites->GetSprite(data->tileManager->GetTile(tileId).sprite);
-			sprite.Draw(target, data->time, topXpixel+x*32, topYpixel+y*32);
+			sprite.Draw(target, data->time, topXpixel+x*tileSize, topYpixel+y*tileSize);
+			if (worldX+x == mouseTileX && worldY+y == mouseTileY) {
+				sf::RectangleShape rect(sf::Vector2f(tileSize-2, tileSize-2));
+				rect.setFillColor(sf::Color::Transparent);
+				rect.setOutlineThickness(1.0f);
+				rect.setOutlineColor(sf::Color::Yellow);
+				rect.setPosition( topXpixel+x*tileSize+1, topYpixel+y*tileSize+1 );
+				target.draw(rect);
+			}
 		}
 	}
 }
@@ -151,19 +160,27 @@ void Game::Draw(sf::RenderWindow &target) {
 	const int tileSize = 32;
 	const int drawWidth = 40;
 	const int drawHeight = 30;
-	DrawTiles(target, (-data->center_x)%tileSize-tileSize, (-data->center_y)%tileSize-tileSize, drawWidth, drawHeight, data->mainworld, 
-	(data->center_x)/tileSize-(1024/tileSize)/2-1, (data->center_y)/tileSize-(768/tileSize)/2-1);
+	const sf::Vector2u screenSize(1024,768);
+	int topXpixel = (-data->center_x)%tileSize-tileSize; 
+	int topYpixel = (-data->center_y)%tileSize-tileSize;
+	int mouseTileX = data->mousePos.x/tileSize;
+	int mouseTileY = data->mousePos.y/tileSize;
+	DrawTiles(target, topXpixel, topYpixel, drawWidth, drawHeight, data->mainworld, 
+	(data->center_x)/tileSize-(screenSize.x/tileSize)/2-1, (data->center_y)/tileSize-(screenSize.y/tileSize)/2-1, tileSize,
+	mouseTileX, mouseTileY);
 	sort(data->placeables.begin(), data->placeables.end(), sort_placeable);
 	for (const auto& placeable : data->placeables) {
 		const MistItem *m = dynamic_cast<MistItem*>(placeable.get());
 		if (m) {
-			DrawMiscItem(target, data->sprites, m, data->time, data->center_x-1024/2, data->center_y-768/2, data->drawCollision);
+			DrawMiscItem(target, data->sprites, m, data->time, data->center_x-screenSize.x/2, data->center_y-screenSize.y/2, data->drawCollision);
 		}
 		const Human *h = dynamic_cast<Human*>(placeable.get());
 		if (h) {
-			DrawHumanEntity(target, data->sprites, h, data->time, data->center_x-1024/2, data->center_y-768/2, data->drawCollision);
+			DrawHumanEntity(target, data->sprites, h, data->time, data->center_x-screenSize.x/2, data->center_y-screenSize.y/2, data->drawCollision);
 		}
 	}
+	/*cout << "Center: (" << data->center_x << ", " << data->center_y << "), Mouse: " << data->mousePos.x << ", " << data->mousePos.y << "), MousePos: (" <<
+			mouseTileX << ", " << mouseTileY << ")" << endl;*/
 }
 
 static vector<pair<long long int, long long int> > getTouchingTiles(const Placeable* entity) {
@@ -256,6 +273,8 @@ void Game::Update(float fDeltaTime, const sago::SagoCommandQueue &input) {
 	data->center_x = round(data->human->X);
 	data->center_y = round(data->human->Y);
 	CheckCollision(data->placeables);
+	data->mousePos.x = input.GetMousePosition().x - 1024.0f/2.0f + data->center_x;
+	data->mousePos.y = input.GetMousePosition().y - 768.0f/2.0f + data->center_y;
 	//cout << round(data->human->X/32) << " " << round(data->human->Y/32) << endl;
 }
 

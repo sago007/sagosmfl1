@@ -25,7 +25,7 @@ public:
 	void UpdateCommandQueue(sago::SagoCommandQueue &inout) override;
 	bool ProcessConsoleCommand(const std::vector<std::string>& arg) override;
 private:
-	void DrawTiles(sf::RenderWindow &target, int topX, int topY, int width, int height, World& world, long long worldX, long long worldY);
+	void DrawTiles(sf::RenderWindow &target, int topX, int topY, int width, int height, World& world, long long worldX, long long worldY, int tileSize, int mouseTileX, int mouseTileY);
 	struct GameImpl;
 	GameImpl* data;
 };
