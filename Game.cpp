@@ -122,6 +122,8 @@ static void DrawHumanEntity(sf::RenderWindow &target, const std::shared_ptr<sago
 	}
 	const sago::SagoSprite &mySprite = sHolder->GetSprite(entity->race + "_"+animation+"_"+string(1,entity->direction));
 	mySprite.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
+	const sago::SagoSprite &myHair = sHolder->GetSprite(entity->race + "_"+animation+"_hair_1_"+string(1,entity->direction));
+	myHair.Draw(target, time, entity->X-offsetX, entity->Y-offsetY);
 }
 
 static void DrawMiscItem(sf::RenderWindow &target, const std::shared_ptr<sago::SagoSpriteHolder> &sHolder, const MistItem *entity, float time, int offsetX, int offsetY, bool drawCollision) {
